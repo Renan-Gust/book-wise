@@ -19,7 +19,7 @@ export default function Home(){
 
     useEffect(() => {
         (async () => {
-            const commentsResponse = await api.get("/comments");
+            const commentsResponse = await api.get("/comments/comments");
             setComments(commentsResponse.data);
 
             const popularBooksResponse = await api.get("/books/popularBooks");
