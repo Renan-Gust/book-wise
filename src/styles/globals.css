@@ -2,26 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+* {
+    box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+::-webkit-scrollbar {
+    width: 6px;
+}
+  
+::-webkit-scrollbar-track {
+    background: #181C2A;
+    border-radius: 999px;
+}
+  
+::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 6px solid #252D4A;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@keyframes skeletonAnimation {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton-item{
+    animation: skeletonAnimation 1600ms ease-in-out infinite;
+    background-image: linear-gradient(90deg, #252d4a21, #181C2A, #252d4a21);
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    width: 100%;
+}
+
+.skeleton-item.ms1400{
+    animation: skeletonAnimation 1400ms ease-in-out infinite;
+}
+
+.skeleton-item.ms2000{
+    animation: skeletonAnimation 2000ms ease-in-out infinite;
 }
