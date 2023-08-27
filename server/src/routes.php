@@ -4,4 +4,5 @@ use core\Router;
 
 $router = new Router();
 
-$router->get('/comments-most-recent', 'CommentsController@commentsMostRecent');
+$router->get('/comments-most-recent', 'CommentController@commentsMostRecent');
+$router->get('/popular-books', 'BookController@popularBooks');

@@ -1,155 +1,82 @@
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 import { Rating } from './Rating';
 import { Avatar } from './Avatar';
-import { Book } from '@/types/book';
-import { User } from '@/types/user';
 import { dateFormatter } from '@/utils/formatter';
+import { api } from '@/lib/axios';
 
-import bookImg from 'public//images/books/o-hobbit.png';
-
-interface ShowComments {
-    comments?: {
-        id: string;
-        description: string;
-        created_at: string;
-        rate: number;
-        book: Book;
-        user: User;
-    }[];
+interface Comments {
+	name: string;
+	avatar_url: string;
+	rate: number;
+	book_name: string;
+	cover_url: string;
+	author: string;
+	summary: string;
+	created_at: string;
 }
 
-export function CommentsMostRecent({ comments }: ShowComments) {
-	return(
-		<section className="grid 2xl:grid-cols-2 3xl:grid-cols-comments gap-3">
-			<article
-				className="p-6 bg-gray-700 rounded-lg min-h-[280px] h-full"
-			>
-				<header className="flex justify-between">
-					<div className="flex gap-4">
-						<Avatar />
+export function CommentsMostRecent() {
+    const [comments, setComments] = useState<Comments[]>([]);
 
-						<div>
-							<p className="text-gray-100">
-                                Renan Gustavo
-							</p>
-							<span className="text-gray-400 text-sm">
-                                Hoje
-							</span>
-						</div>
-					</div>
+    useEffect(() => {
+        (async () => {
+            const commentsResponse = await api.get('/comments-most-recent');
 
-					<Rating rate={5} />
-				</header>
+            if(commentsResponse.data.success){
+                setComments(commentsResponse.data.data);
+            }
+        })();
+    }, []);
 
-				<div className="flex gap-5 mt-8">
-					<Image
-						src={bookImg}
-						alt="uma capa de livro"
-						height={152}
-						width={108}
-						className="h-[152px]"
-					/>
+    return(
+        <section className="grid 2xl:grid-cols-2 3xl:grid-cols-comments gap-3">
+            {comments.map((comment, index) => (
+                <article
+                    className="p-6 bg-gray-700 rounded-lg min-h-[280px] h-full"
+                    key={index}
+                >
+                    <header className="flex justify-between">
+                        <div className="flex gap-4">
+                            <Avatar avatar_url={comment.avatar_url} />
 
-					<div>
-						<h3 className="text-gray-100 font-bold">
-                            O Hobbit
-						</h3>
-						<span className="text-gray-400 text-sm">
-                            J.R.R Tolkien
-						</span>
-						<p className="mt-5 text-sm text-gray-300">
-                            Semper et sapien proin vitae nisi. Feugiat neque integer donec et aenean posuere amet ultrices. Cras fermentum id pulvinar varius leo a in. Amet libero pharetra nunc elementum fringilla velit ipsum. Sed vulputate massa velit nibh...
-						</p>
-					</div>
-				</div>
-			</article>
+                            <div>
+                                <p className="text-gray-100">
+                                    {comment.name}
+                                </p>
+                                <span className="text-gray-400 text-sm">
+                                    {dateFormatter(comment.created_at)}
+                                </span>
+                            </div>
+                        </div>
 
-			<article
-				className="p-6 bg-gray-700 rounded-lg min-h-[280px] h-full"
-			>
-				<header className="flex justify-between">
-					<div className="flex gap-4">
-						<Avatar />
+                        <Rating rate={comment.rate} />
+                    </header>
 
-						<div>
-							<p className="text-gray-100">
-                                Renan Gustavo
-							</p>
-							<span className="text-gray-400 text-sm">
-                                Hoje
-							</span>
-						</div>
-					</div>
+                    <div className="flex gap-5 mt-8">
+                        <Image
+                            src={comment.cover_url}
+                            alt={comment.book_name}
+                            height={152}
+                            width={108}
+                            className="h-[152px]"
+                        />
 
-					<Rating rate={5} />
-				</header>
-
-				<div className="flex gap-5 mt-8">
-					<Image
-						src={bookImg}
-						alt="uma capa de livro"
-						height={152}
-						width={108}
-						className="h-[152px]"
-					/>
-
-					<div>
-						<h3 className="text-gray-100 font-bold">
-                            O Hobbit
-						</h3>
-						<span className="text-gray-400 text-sm">
-                            J.R.R Tolkien
-						</span>
-						<p className="mt-5 text-sm text-gray-300">
-                            Semper et sapien proin vitae nisi. Feugiat neque integer donec et aenean posuere amet ultrices. Cras fermentum id pulvinar varius leo a in. Amet libero pharetra nunc elementum fringilla velit ipsum. Sed vulputate massa velit nibh...
-						</p>
-					</div>
-				</div>
-			</article>
-
-			<article
-				className="p-6 bg-gray-700 rounded-lg min-h-[280px] h-full"
-			>
-				<header className="flex justify-between">
-					<div className="flex gap-4">
-						<Avatar />
-
-						<div>
-							<p className="text-gray-100">
-                                Renan Gustavo
-							</p>
-							<span className="text-gray-400 text-sm">
-                                Hoje
-							</span>
-						</div>
-					</div>
-
-					<Rating rate={5} />
-				</header>
-
-				<div className="flex gap-5 mt-8">
-					<Image
-						src={bookImg}
-						alt="uma capa de livro"
-						height={152}
-						width={108}
-						className="h-[152px]"
-					/>
-
-					<div>
-						<h3 className="text-gray-100 font-bold">
-                            O Hobbit
-						</h3>
-						<span className="text-gray-400 text-sm">
-                            J.R.R Tolkien
-						</span>
-						<p className="mt-5 text-sm text-gray-300">
-                            Semper et sapien proin vitae nisi. Feugiat neque integer donec et aenean posuere amet ultrices. Cras fermentum id pulvinar varius leo a in. Amet libero pharetra nunc elementum fringilla velit ipsum. Sed vulputate massa velit nibh...
-						</p>
-					</div>
-				</div>
-			</article>
-		</section>
-	);
+                        <div>
+                            <h3 className="text-gray-100 font-bold">
+                                {comment.book_name}
+                            </h3>
+                            <span className="text-gray-400 text-sm">
+                                {comment.author}
+                            </span>
+                            <p className="mt-5 text-sm text-gray-300">
+                                {comment.summary}
+                            </p>
+                        </div>
+                    </div>
+                </article>
+            ))}
+        </section>
+    );
 }

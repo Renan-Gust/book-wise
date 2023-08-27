@@ -7,28 +7,20 @@ import { ChartLineUp, ArrowRight } from 'phosphor-react';
 import { CommentsMostRecent } from '@/components/CommentsMostRecent';
 import { Book } from '@/components/Book';
 import { Header } from '@/components/Header';
-import { api } from '@/lib/axios';
-import { useBook } from '@/contexts/BookContext';
 import { Layout } from '@/components/Layout';
+import { api } from '@/lib/axios';
 
 export default function Home(){
-    const [comments, setComments] = useState();
-    const [popularBooks, setPopularBooks] = useState();
-
-    // const { books } = useBook();
-    // console.log(books);
+    const [popularBooks, setPopularBooks] = useState([]);
 
     useEffect(() => {
-        // (async () => {
-        //     const commentsResponse = await api.get("/comments/comments");
-        //     setComments(commentsResponse.data);
+        (async () => {
+            const response = await api.get('/popular-books');
 
-        //     const popularBooksResponse = await api.get("/books/popularBooks");
-        //     setPopularBooks(popularBooksResponse.data);
-
-        //     console.log(comments);
-        //     console.log(popularBooks);
-        // })();
+            if(response.data.success){
+                setPopularBooks(response.data.data);
+            }
+        })();
     }, []);
 
     return(
@@ -44,7 +36,7 @@ export default function Home(){
                     <article className="w-full md:max-w-[608px] 2lg:max-w-[674px] 2xl:max-w-[748px] 3xl:max-w-[1228px] md:flex-1 lg:flex-initial">
                         <h2 className="text-gray-100 text-sm mb-4">Avaliações mais recentes</h2>
 
-                        <CommentsMostRecent comments={comments} />
+                        <CommentsMostRecent />
                     </article>
 
                     <article className="w-full md:w-[324px] mt-10 md:mt-0">
