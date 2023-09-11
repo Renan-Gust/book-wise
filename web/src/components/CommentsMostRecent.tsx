@@ -24,7 +24,7 @@ export function CommentsMostRecent() {
         (async () => {
             const commentsResponse = await api.get('/comments-most-recent');
 
-            if(commentsResponse.data.success){
+            if(commentsResponse.data.success && !commentsResponse.data.message){
                 setComments(commentsResponse.data.data);
             }
         })();
@@ -32,7 +32,7 @@ export function CommentsMostRecent() {
 
     return(
         <section className="grid 2xl:grid-cols-2 3xl:grid-cols-comments gap-3">
-            {comments.map((comment, index) => (
+            {comments.length > 0 && comments.map((comment, index) => (
                 <article
                     className="p-6 bg-gray-700 rounded-lg min-h-[280px] h-full"
                     key={index}

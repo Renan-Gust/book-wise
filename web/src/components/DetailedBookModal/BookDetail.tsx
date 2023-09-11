@@ -1,27 +1,27 @@
-import { use } from 'react';
+// import { use } from 'react';
 import Image from 'next/image';
 
 import { Bookmark, BookOpen } from 'phosphor-react';
 
+// import { api } from '@/lib/axios';
 import { Rating } from '../Rating';
-import { api } from '@/lib/axios';
 import { Book } from '@/types/book';
 
 interface BookDetailProps {
     book: Book;
 }
 
-interface Rating {
-    id: string;
-    description: string;
-    created_at: string;
-    rate: number;
-}
+// interface Rating {
+//     id: string;
+//     description: string;
+//     created_at: string;
+//     rate: number;
+// }
 
-async function getBook(id: string){
-    const data = await api.get(`/books/book/${id}`);
-    return data.data;
-}
+// async function getBook(id: string){
+//     const data = await api.get(`/books/book/${id}`);
+//     return data.data;
+// }
 
 export function BookDetail({ book }: BookDetailProps) {
     // const response = use(getBook(bookId));
@@ -31,6 +31,8 @@ export function BookDetail({ book }: BookDetailProps) {
     // }, 0);
 
     // console.log(rate)
+
+    console.log(book);
 
     return(
         <div className="bg-gray-700 rounded-lg p-6">
@@ -49,7 +51,7 @@ export function BookDetail({ book }: BookDetailProps) {
                         <span className="text-gray-300 text">{book.author}</span>
                     </div>
 
-                    {/* <Rating rate={rate} ratingTotal={response.rating.lenght} /> */}
+                    <Rating rate={book.rate!} totalRating={book.totalRate} />
                 </div>
             </div>
 

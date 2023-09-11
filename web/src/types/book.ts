@@ -5,4 +5,6 @@ export interface Book {
     cover_url: string;
     summary: string;
     total_pages: number;
+    rate?: number;
+    totalRate?: number;
 }

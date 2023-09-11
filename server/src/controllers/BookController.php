@@ -38,17 +38,17 @@ class BookController extends Controller
                     "summary" => $rating["summary"],
                     "total_pages" => $rating["total_pages"],
                     "rate" => $rating["rate"],
-                    "total" => 1
+                    "totalRate" => 1
                 ];
             } else {
                 $result[$id]["rate"] += $rating["rate"];
-                $result[$id]["total"] += 1;
+                $result[$id]["totalRate"] += 1;
             }
         }
 
         foreach(array_values($result) as $key => $value){
-            if($value["rate"] / $value["total"] >= 4 && $value["total"] >= 2){
-                $value["rate"] = ceil($value["rate"] / $value["total"]);
+            if($value["rate"] / $value["totalRate"] >= 4 && $value["totalRate"] >= 2){
+                $value["rate"] = ceil($value["rate"] / $value["totalRate"]);
 
                 $popularBooks[] = $value;
             }

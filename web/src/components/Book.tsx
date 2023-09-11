@@ -4,25 +4,21 @@ import * as Dialog from '@radix-ui/react-dialog';
 
 import { Rating } from './Rating';
 import { DetailedBookModal } from './DetailedBookModal/index';
-import { Book } from '@/types/book';
-
-interface ExtendedBook extends Book {
-    rate: number;
-}
+import { Book as BookType } from '@/types/book';
 
 interface BookProps {
     type: 'small' | 'large';
-    books: ExtendedBook[];
+    books: BookType[];
 }
 
 export function Book({ type, books }: BookProps) {
-    const [currentBook, setCurrentBook] = useState({} as Book);
+    const [currentBook, setCurrentBook] = useState({} as BookType);
 
     return(
         <>
             <Dialog.Root>
                 {books.map((book, index) => (
-                    <Dialog.Trigger asChild key={index}>
+                    <Dialog.Trigger asChild key={index} onClick={() => setCurrentBook(book)}>
                         <article className={`p-6 border-[2px] border-transparent bg-gray-700 hover:border-[2px] hover:border-gray-600 hover:transition rounded-lg cursor-pointer ${type === 'small' ? 'h-[130px]' : 'h-[184px]'}`}>
                             <div className="flex gap-5">
                                 <Image
@@ -39,7 +35,7 @@ export function Book({ type, books }: BookProps) {
                                         <span className="text-gray-400 text-sm">{book.author}</span>
                                     </div>
         
-                                    <Rating rate={book.rate} />
+                                    <Rating rate={book.rate!} />
                                 </div>
                             </div>
                         </article>

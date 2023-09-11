@@ -48,6 +48,10 @@ class CommentController extends Controller
             "data" => $data
         ];
 
+        if(count($data) === 0){
+            $response["message"] = "Nenhum comentário recente encontrado";
+        }
+
         $this->response($response);
     }
 }
