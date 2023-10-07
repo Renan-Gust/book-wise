@@ -23,10 +23,7 @@ export function CommentsMostRecent() {
     useEffect(() => {
         (async () => {
             const commentsResponse = await api.get('/comments-most-recent');
-
-            if(commentsResponse.data.success && !commentsResponse.data.message){
-                setComments(commentsResponse.data.data);
-            }
+            setComments(commentsResponse.data);
         })();
     }, []);
 

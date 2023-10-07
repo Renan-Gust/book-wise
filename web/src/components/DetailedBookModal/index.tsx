@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'phosphor-react';
 
@@ -12,6 +13,8 @@ interface DetailedBookModalProps {
 }
 
 export function DetailedBookModal({ book }: DetailedBookModalProps) {
+    const [addCommentShow, setAddCommentShow] = useState(false);
+
     return(
         <Dialog.Portal className='h-screen'>
             <Dialog.Overlay className='fixed w-screen h-screen inset-0 mix-blend-overlay bg-black opacity-60' />
@@ -33,15 +36,20 @@ export function DetailedBookModal({ book }: DetailedBookModalProps) {
 
                                 <Dialog.Root>
                                     <Dialog.Trigger asChild>
-                                        <button className='text-purple-100 font-bold'>Avaliar</button>
+                                        <button
+                                            className='text-purple-100 font-bold'
+                                            // onClick={setAddCommentShow(!addCommentShow)}
+                                        >
+                                            Avaliar
+                                        </button>
                                     </Dialog.Trigger>
 
                                     <LoginModal />
                                 </Dialog.Root>
                             </div>
 
-                            <AddComment />
-                            <Comments />
+                            {addCommentShow && <AddComment /> }
+                            <Comments bookId={book.id} />
                         </div>
                     </div>
                 </div>

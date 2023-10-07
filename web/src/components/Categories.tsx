@@ -1,44 +1,60 @@
-'use client';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
-import { MouseEvent, useState } from 'react';
+import { api } from '@/lib/axios';
+import { Book } from '@/types/book';
 
-const categories: string[] = ['Tudo', 'Computação', 'Educação', 'Fantasia', 'Ficção científica', 'Horror', 'HQs', 'Suspense'];
+interface CategoriesProps {
+	books: Book[];
+	setBooksFiltered: Dispatch<SetStateAction<Book[]>>;
+}
 
-export function Categories() {
-	const [categoriesSelected, setCategoriesSelected] = useState<string[]>(['Tudo']);
+export function Categories({ books, setBooksFiltered }: CategoriesProps) {
+    const [categories, setCategories] = useState<string[]>([]);
+    const [categorySelected, setCategorySelected] = useState('Tudo');
 
-	function handleSelectCategory(event: MouseEvent) {
-		const target = event.currentTarget.classList;
-		const categoryName = event.currentTarget.children[0].textContent;
+    useEffect(() => {
+        (async () => {
+            const response = await api.get('/categories');
+            setCategories(response.data);
+        })();
+    }, []);
 
-		// Verificar se a categoria é diferente de 'tudo' se sim(desmarcar a 'tudo' e marcar a selecionada), se não acontece nada
-		// Se uma outra categoria estiver selecionada não sendo a 'tudo', quando ele clicar na 'tudo' desmarcar todas e selecionar a 'tudo'
+    function handleSelectCategory(categoryName: string) {
+        setCategorySelected(categoryName);
 
-		if(categoriesSelected.find(element => element === categoryName)){
-			console.log('tem');
-		} else{
-			console.log('não tem');
-		}
+        if(categoryName === 'Tudo'){
+            setBooksFiltered(books);
+        } else{
+            const booksFiltered: Book[] = [];
 
-		target.add('bg-purple-200');
-		target.add('text-gray-100');
-		target.remove('text-purple-100');
-		target.remove('border');
+            books.map((book) => {
+                if(book.categories?.indexOf(categoryName) !== -1){
+                    booksFiltered.push(book);
+                }
+            });
 
-		target.add('selected');
-	}
+            setBooksFiltered(booksFiltered);
+        }
+    }
 
-	return(
-		<section className='my-10 flex gap-3 hidden lg:flex'>
-			{categories.map((category, index) => (
-				<div
-					className={'border border-purple-100 rounded-full h-[34px] cursor-pointer flex justify-center items-center hover:bg-purple-200 text-purple-100 hover:text-gray-100 hover:transition'}
-					key={index}
-					onClick={(event) => handleSelectCategory(event)}
-				>
-					<span className='py-1 px-4'>{ category }</span>
-				</div>
-			))}
-		</section>
-	);
+    return(
+        <section className='my-10 gap-3 hidden lg:grid grid-cols-8'>
+            <div
+                className={`border-purple-100 rounded-full h-[34px] cursor-pointer flex justify-center items-center hover:bg-purple-200 hover:text-gray-100 hover:transition ${categorySelected === 'Tudo' ? 'bg-purple-200 text-gray-100' : 'border text-purple-100'}`}
+                onClick={() => handleSelectCategory('Tudo')}
+            >
+                <span className='py-1 px-4'>Tudo</span>
+            </div>
+
+            {categories.map((category, index) => (
+                <div
+                    className={`border-purple-100 rounded-full h-[34px] cursor-pointer flex justify-center items-center hover:bg-purple-200 hover:text-gray-100 hover:transition ${categorySelected === category ? 'bg-purple-200 text-gray-100' : 'border text-purple-100'}`}
+                    key={index}
+                    onClick={() => handleSelectCategory(category)}
+                >
+                    <span className='py-1 px-4'>{ category }</span>
+                </div>
+            ))}
+        </section>
+    );
 }

@@ -7,4 +7,5 @@ export interface Book {
     total_pages: number;
     rate?: number;
     totalRate?: number;
+    categories?: string[];
 }

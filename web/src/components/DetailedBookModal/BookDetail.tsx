@@ -1,9 +1,9 @@
-// import { use } from 'react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 import { Bookmark, BookOpen } from 'phosphor-react';
 
-// import { api } from '@/lib/axios';
+import { api } from '@/lib/axios';
 import { Rating } from '../Rating';
 import { Book } from '@/types/book';
 
@@ -11,28 +11,15 @@ interface BookDetailProps {
     book: Book;
 }
 
-// interface Rating {
-//     id: string;
-//     description: string;
-//     created_at: string;
-//     rate: number;
-// }
-
-// async function getBook(id: string){
-//     const data = await api.get(`/books/book/${id}`);
-//     return data.data;
-// }
-
 export function BookDetail({ book }: BookDetailProps) {
-    // const response = use(getBook(bookId));
-    // console.log(response);
-    // const rate = response.rating.reduce((acc: number, rating: Rating) => {
-    //     acc += rating.rate
-    // }, 0);
+    const [categories, setCategories] = useState<string[]>([]);
 
-    // console.log(rate)
-
-    console.log(book);
+    useEffect(() => {
+        (async () => {
+            const response = await api.get(`/book/${book.id}/categories`);
+            setCategories(response.data);
+        })();
+    }, []);
 
     return(
         <div className="bg-gray-700 rounded-lg p-6">
@@ -62,7 +49,13 @@ export function BookDetail({ book }: BookDetailProps) {
 
                         <div>
                             <h2 className='text-gray-300 text-sm'>Categoria</h2>
-                            <span className='text-gray-200 font-bold'>Computação, educação</span>
+                            <span className='text-gray-200 font-bold'>
+                                {categories.map((category) => {
+                                    return(
+                                        `${category}`
+                                    );
+                                }).join(', ')}
+                            </span>
                         </div>
                     </div>
 

@@ -3,11 +3,48 @@
 namespace src\controllers;
 
 use core\Controller;
+use src\models\Book;
+use src\models\BooksCategory;
 use src\models\Rating;
 
 class BookController extends Controller
 {
-    public function popularBooks(){
+    public function getBooks($args){
+        var_dump($args["search"]);
+        exit;
+        $books = Book::select()->orderBy("created_at", "desc")->get();
+        $data = [];
+
+        foreach($books as $book){
+            $rating = Rating::select()->where("book_id", $book["id"])->one();
+
+            $bookCategories = BooksCategory::select("categories.name")
+            ->where("book_id", $book["id"])
+            ->join("categories", "books_categories.category_id", "=", "categories.id")
+            ->get();
+
+            $categories = [];
+
+            foreach($bookCategories as $bookCategory){
+                $categories[] = $bookCategory['name'];
+            }
+
+            $data[] = [
+                "id" => $book["id"],
+                "name" => $book["name"],
+                "author" => $book["author"],
+                "summary" => $book["summary"],
+                "cover_url" => $this->getBaseUrl() . "/" . $book["cover_url"],
+                "total_pages" => $book["total_pages"],
+                "rate" => $rating ? $rating["rate"] : 0,
+                "categories" => $categories
+            ];
+        }
+
+        $this->response($data);
+    }
+
+    public function getPopularBooks(){
         $fields = [
             "books.name",
             "books.cover_url",
@@ -54,11 +91,21 @@ class BookController extends Controller
             }
         }
 
-        $response = [
-            "success" => true,
-            "data" => $popularBooks
-        ];
+        $this->response($popularBooks);
+    }
 
-        $this->response($response);
+    public function getBookCategories($args){
+        $categories = BooksCategory::select("categories.name")
+        ->where("book_id", $args["id"])
+        ->join("categories", "books_categories.category_id", "=", "categories.id")
+        ->get();
+
+        $data = [];
+
+        foreach($categories as $category){
+            $data[] = $category['name'];
+        }
+
+        $this->response($data);
     }
 }

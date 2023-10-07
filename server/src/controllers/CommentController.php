@@ -7,7 +7,7 @@ use src\models\Rating;
 
 class CommentController extends Controller
 {
-    public function commentsMostRecent(){
+    public function getCommentsMostRecent(){
         $date = Date("Y-m-d", strtotime('-7 days'));
 
         $fields = [
@@ -43,15 +43,36 @@ class CommentController extends Controller
             ];
         }
 
-        $response = [
-            "success" => true,
-            "data" => $data
+        $this->response($data);
+    }
+
+    public function getBookComments($args){
+        $fields = [
+            "users.name",
+            "users.avatar_url",
+            "ratings.description",
+            "ratings.rate",
+            "ratings.created_at"
         ];
 
-        if(count($data) === 0){
-            $response["message"] = "Nenhum comentário recente encontrado";
+        $ratings = Rating::select($fields)
+        ->where("book_id", $args["id"])
+        ->orderBy("ratings.created_at", "desc")
+        ->join("users", "ratings.user_id", "=", "users.id")
+        ->get();
+
+        $data = [];
+
+        foreach($ratings as $rating){
+            $data[] = [
+                "name" => $rating["name"],
+                "avatar_url" => $rating["avatar_url"],
+                "rate" => (int)$rating["rate"],
+                "description" => $rating["description"],
+                "created_at" => $rating["created_at"]
+            ];
         }
 
-        $this->response($response);
+        $this->response($data);
     }
 }

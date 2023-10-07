@@ -16,10 +16,7 @@ export default function Home(){
     useEffect(() => {
         (async () => {
             const response = await api.get('/popular-books');
-
-            if(response.data.success){
-                setPopularBooks(response.data.data);
-            }
+            setPopularBooks(response.data);
         })();
     }, []);
 
