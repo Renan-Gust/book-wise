@@ -1,14 +1,17 @@
-import { InputHTMLAttributes, useState, useEffect } from 'react';
+import { InputHTMLAttributes, useState, useEffect, SetStateAction, Dispatch } from 'react';
 
 import { MagnifyingGlass } from 'phosphor-react';
+import { api } from '@/lib/axios';
+import { Book } from '@/types/book';
 
 interface InputFilterProps extends InputHTMLAttributes<HTMLElement> {
     fullWidth?: boolean;
+    returnFiltered: Dispatch<SetStateAction<Book[]>>;
 }
 
 let searchTimer: any = null;
 
-export function InputFilter({ fullWidth, ...props }: InputFilterProps) {
+export function InputFilter({ fullWidth, returnFiltered, ...props }: InputFilterProps) {
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -19,8 +22,9 @@ export function InputFilter({ fullWidth, ...props }: InputFilterProps) {
         }, 2000);
     }, [search]);
 
-    function searchBooks(){
-        console.log(search);
+    async function searchBooks(){
+        const response = await api.get(`/books?search=${search}`);
+        returnFiltered(response.data);
     }
 
     return(

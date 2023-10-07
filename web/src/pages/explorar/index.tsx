@@ -31,7 +31,7 @@ export default function Explorar(){
             <Layout>
                 <div className='flex flex-wrap items-center justify-between gap-10'>
                     <Header img={<Binoculars  size={32} color="#50B2C0" />} title="Explorar" />
-                    <InputFilter placeholder="Buscar livro ou autor" />
+                    <InputFilter placeholder="Buscar livro ou autor" returnFiltered={setBooksFiltered} />
                 </div>
 
                 <Categories books={books} setBooksFiltered={setBooksFiltered} />

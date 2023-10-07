@@ -9,10 +9,19 @@ use src\models\Rating;
 
 class BookController extends Controller
 {
-    public function getBooks($args){
-        var_dump($args["search"]);
-        exit;
-        $books = Book::select()->orderBy("created_at", "desc")->get();
+    public function getBooks(){
+        $search = filter_input(INPUT_GET, "search");
+
+        if ($search){
+            $books = Book::select()
+            ->orderBy("created_at", "desc")
+            ->where("name", "like", "%{$search}%")
+            ->orWhere("author", "like", "%{$search}%")
+            ->get();
+        } else{
+            $books = Book::select()->orderBy("created_at", "desc")->get();
+        }
+
         $data = [];
 
         foreach($books as $book){
