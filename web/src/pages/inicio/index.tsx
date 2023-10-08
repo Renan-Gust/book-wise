@@ -6,17 +6,23 @@ import { ChartLineUp, ArrowRight } from 'phosphor-react';
 
 import { CommentsMostRecent } from '@/components/CommentsMostRecent';
 import { Book } from '@/components/Book';
+import { LoadingBook } from '@/components/Book/LoadingBook';
 import { Header } from '@/components/Header';
 import { Layout } from '@/components/Layout';
 import { api } from '@/lib/axios';
 
 export default function Home(){
     const [popularBooks, setPopularBooks] = useState([]);
+    const [popularBooksLoading, setPopularBooksLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
+            setPopularBooksLoading(true);
+
             const response = await api.get('/popular-books');
             setPopularBooks(response.data);
+
+            setPopularBooksLoading(false);
         })();
     }, []);
 
@@ -47,7 +53,11 @@ export default function Home(){
                         </div>
 
                         <section className="flex flex-col gap-3">
-                            <Book type='small' books={popularBooks} />
+                            {popularBooksLoading ?
+                                <LoadingBook />
+                                :
+                                <Book type='small' books={popularBooks} />
+                            }
                         </section>
                     </article>
                 </section>

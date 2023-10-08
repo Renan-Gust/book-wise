@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 
-import { Rating } from './Rating';
-import { DetailedBookModal } from './DetailedBookModal/index';
+import { Rating } from '../Rating';
+import { DetailedBookModal } from '../DetailedBookModal/index';
 import { Book as BookType } from '@/types/book';
 
 interface BookProps {

@@ -3,6 +3,7 @@ import { InputHTMLAttributes, useState, useEffect, SetStateAction, Dispatch } fr
 import { MagnifyingGlass } from 'phosphor-react';
 import { api } from '@/lib/axios';
 import { Book } from '@/types/book';
+import { LoadingFullPage } from './LoadingFullPage';
 
 interface InputFilterProps extends InputHTMLAttributes<HTMLElement> {
     fullWidth?: boolean;
@@ -13,6 +14,7 @@ let searchTimer: any = null;
 
 export function InputFilter({ fullWidth, returnFiltered, ...props }: InputFilterProps) {
     const [search, setSearch] = useState('');
+    const [searchLoading, setSearchLoading] = useState(false);
 
     useEffect(() => {
         clearTimeout(searchTimer);
@@ -23,8 +25,12 @@ export function InputFilter({ fullWidth, returnFiltered, ...props }: InputFilter
     }, [search]);
 
     async function searchBooks(){
+        setSearchLoading(true);
+
         const response = await api.get(`/books?search=${search}`);
         returnFiltered(response.data);
+
+        setSearchLoading(false);
     }
 
     return(
@@ -38,6 +44,8 @@ export function InputFilter({ fullWidth, returnFiltered, ...props }: InputFilter
             />
 
             <MagnifyingGlass size={20} color="#303F73" className="h-5 absolute top-3.5 right-3.5" />
+
+            {searchLoading && <LoadingFullPage />}
         </div>
     );
 }

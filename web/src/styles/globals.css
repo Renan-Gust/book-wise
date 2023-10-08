@@ -22,25 +22,20 @@
 
 @keyframes skeletonAnimation {
     0% {
-        background-position: -200px 0;
+        background-position: -468px 0;
     }
-    100% {
-        background-position: calc(200px + 100%) 0;
+     100% {
+        background-position: 468px 0;
     }
 }
 
 .skeleton-item{
-    animation: skeletonAnimation 1600ms ease-in-out infinite;
-    background-image: linear-gradient(90deg, #252d4a21, #181C2A, #252d4a21);
-    background-size: 200px 100%;
-    background-repeat: no-repeat;
-    width: 100%;
-}
+    animation: 4s skeletonAnimation infinite ease-out;
 
-.skeleton-item.ms1400{
-    animation: skeletonAnimation 1400ms ease-in-out infinite;
-}
+    background: #252D4A;
+    background: linear-gradient(to right, #2b3455 8%, #1a1f33 18%, #2b3455 33%);
+    background-size: 800px 100px;
 
-.skeleton-item.ms2000{
-    animation: skeletonAnimation 2000ms ease-in-out infinite;
+    border-radius: 8px;
+    height: 20px;
 }

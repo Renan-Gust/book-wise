@@ -9,16 +9,22 @@ import { Categories } from '@/components/Categories';
 import { Layout } from '@/components/Layout';
 import { api } from '@/lib/axios';
 import { Book as BookType } from '@/types/book';
+import { LoadingBook } from '@/components/Book/LoadingBook';
 
 export default function Explorar(){
     const [books, setBooks] = useState<BookType[]>([]);
     const [booksFiltered, setBooksFiltered] = useState<BookType[]>([]);
+    const [booksLoading, setBooksLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
+            setBooksLoading(true);
+
             const response = await api.get('/books');
             setBooks(response.data);
             setBooksFiltered(response.data);
+
+            setBooksLoading(false);
         })();
     }, []);
 
@@ -37,7 +43,11 @@ export default function Explorar(){
                 <Categories books={books} setBooksFiltered={setBooksFiltered} />
 
                 <section className="grid md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-5 gap-5">
-                    <Book type="large" books={booksFiltered} />
+                    {booksLoading ?
+                        <LoadingBook length={15} />
+                        :
+                        <Book type="large" books={booksFiltered} />
+                    }
                 </section>
             </Layout>
         </>
