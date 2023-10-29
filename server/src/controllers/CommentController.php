@@ -28,6 +28,15 @@ class CommentController extends Controller
         ->join("books", "ratings.book_id", "=", "books.id")
         ->get();
 
+        if(empty($ratings)){
+            $ratings = Rating::select($fields)
+            ->orderBy("ratings.created_at", "desc")
+            ->join("users", "ratings.user_id", "=", "users.id")
+            ->join("books", "ratings.book_id", "=", "books.id")
+            ->limit(5)
+            ->get();
+        }
+
         $data = [];
 
         foreach($ratings as $rating){

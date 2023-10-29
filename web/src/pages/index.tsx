@@ -28,9 +28,9 @@ export default function Home() {
                     <p className="text-gray-200">Faça seu login ou acesse como visitante.</p>
 
                     <div className="mt-10 flex flex-col items-center gap-y-4 w-full">
-                        <Button text="Entrar com Goggle" type="google" />
-                        <Button text="Entrar com GitHub" type="github" />
-                        <Button text="Acessar como visitante" type="guest" />
+                        <Button href="#" text="Entrar com Goggle" type="google" />
+                        <Button href="#" text="Entrar com GitHub" type="github" />
+                        <Button href="/inicio" text="Acessar como visitante" type="guest" />
                     </div>
                 </article>
             </section>
