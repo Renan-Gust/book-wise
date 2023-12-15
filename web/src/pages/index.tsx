@@ -2,10 +2,14 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import { Button } from '@/components/Button';
+import { useAuth } from '@/contexts/AuthContext';
+import { LoadingFullPage } from '@/components/LoadingFullPage';
 
 import bgImg from 'public/images/bg-login.webp';
 
 export default function Home() {
+    const { loading, signIn } = useAuth();
+
     return(
         <>
             <Head>
@@ -28,12 +32,14 @@ export default function Home() {
                     <p className="text-gray-200">Faça seu login ou acesse como visitante.</p>
 
                     <div className="mt-10 flex flex-col items-center gap-y-4 w-full">
-                        <Button href="#" text="Entrar com Goggle" type="google" />
-                        <Button href="#" text="Entrar com GitHub" type="github" />
+                        <Button text="Entrar com Goggle" type="google" onClick={signIn} />
+                        <Button text="Entrar com GitHub" type="github" />
                         <Button href="/inicio" text="Acessar como visitante" type="guest" />
                     </div>
                 </article>
             </section>
+
+            {/* {loading && <LoadingFullPage />} */}
         </>
     );
 }

@@ -30,6 +30,9 @@ class UserController extends Controller
     }
     
     public function callback($args){
+        echo "callback";
+        exit;
+
         $provider = $args["provider"];
         $user = $this->auth->auth(ucfirst($provider));
 
